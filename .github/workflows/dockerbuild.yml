@@ -42,3 +42,9 @@ jobs:
       run: sh ./dockerbuild.sh \
         "${{github.sha}}" \
         "dipy"
+
+    - name: Build and push a tagged image
+      if: startsWith(github.event.ref, 'refs/tags')
+      run: |
+        echo "TAG=$(echo ${GITHUB_REF#refs/*/})" >> $GITHUB_ENV
+        sh ./docker-build.sh ${{TAG}} dipy
